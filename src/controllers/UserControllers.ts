@@ -3,9 +3,11 @@ import { getRepository } from 'typeorm';
 import User from '../database/entities/User';
 import Category from '../database/entities/Category';
 
-interface IRequest {
-  name: string;
-  categories: string[];
+interface IRequest extends Request {
+  body: {
+    name: string;
+    categories: string[];
+  };
 }
 
 interface DataCategory {
@@ -16,11 +18,11 @@ interface DataCategory {
 }
 
 export default class UserControllers {
-  public async create(req: Request, res: Response): Promise<Response> {
+  public async create(req: IRequest, res: Response): Promise<Response> {
     const userRepository = getRepository(User);
     const categoryRepository = getRepository(Category);
 
-    const { name, categories } = req.body as IRequest;
+    const { name, categories } = req.body;
 
     const findCategories = await categoryRepository.find();
 
